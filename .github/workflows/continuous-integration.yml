@@ -27,4 +27,4 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
     - name: Run component tests
-      run: ./gradlew test --tests "com.shelter.animalback.component.api.*"
+      run: ./gradlew test --tests "com.example.demo.component.api.movie.*"
