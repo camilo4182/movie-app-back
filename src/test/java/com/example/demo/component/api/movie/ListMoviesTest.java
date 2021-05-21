@@ -2,6 +2,10 @@ package com.example.demo.component.api.movie;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
+import org.everit.json.schema.loader.SchemaLoader;
+import org.json.JSONTokener;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,8 +24,6 @@ import com.example.demo.repository.MovieRepository;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import lombok.SneakyThrows;
 
 @ExtendWith(SpringExtension.class)
@@ -30,7 +32,7 @@ import lombok.SneakyThrows;
         properties = { "spring.config.additional-location=classpath:component-test.yml"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureMockMvc
-public class GetMovieTest {
+public class ListMoviesTest {
 	
 	@Autowired
     private MockMvc mockMvc;
@@ -42,25 +44,30 @@ public class GetMovieTest {
 	public void setUp() {
 		var movie = new Movie("Scarface", "The world is yours", "Brian De Palma");
 		movieRepository.save(movie);
-	
 	}
 	
 	@Test
 	@SneakyThrows
-	public void movieDetailWithSuccessStatusCodeAndContentType() {
-		var response = mockMvc.perform(get("/movies/Scarface")).andReturn().getResponse();
-		assertThat(response.getStatus(), equalTo(HttpStatus.OK.value()));
+	public void listMoviesSuccessfully() {
+        var response = mockMvc.perform(get("/movies")).andReturn().getResponse();
+
+        assertThat(response.getStatus(), equalTo(HttpStatus.OK.value()));
         assertThat(response.getContentType(), equalTo(MediaType.APPLICATION_JSON.toString()));
-	}
+    }
 	
 	@Test
-    @SneakyThrows
-    public void detailWithTheRightMovie() {
-		var response = mockMvc.perform(get("/movies/Scarface")).andReturn().getResponse();
-		var movie = new ObjectMapper().readValue(response.getContentAsString(), Movie.class);
-		assertThat(movie.getTitle(), equalTo("Scarface"));
-        assertThat(movie.getDescription(), equalTo("The world is yours"));
-        assertThat(movie.getDirector(), equalTo("Brian De Palma"));
-	}
+	@SneakyThrows
+	public void listMoviesWithRightSchema() {
+        var response = mockMvc.perform(get("/movies")).andReturn().getResponse();
+
+        assertThat(response.getStatus(), equalTo(HttpStatus.OK.value()));
+        assertThat(response.getContentType(), equalTo(MediaType.APPLICATION_JSON.toString()));
+        
+        var jsonSchema = new JSONObject(new JSONTokener(ListMoviesTest.class.getResourceAsStream("/movies.json")));
+        var jsonArray = new JSONArray(response.getContentAsString());
+        
+        var schema = SchemaLoader.load(jsonSchema);
+        schema.validate(jsonArray);
+    }
 
 }

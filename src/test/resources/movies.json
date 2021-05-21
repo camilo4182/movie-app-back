@@ -1,0 +1,21 @@
+{
+  "type": "array",
+  "minItems": 1,
+  "items": [
+    {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "director": {
+          "type": "string"
+        }
+      },
+      "required": ["title", "description", "director"]
+    }
+  ]
+}
