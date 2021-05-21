@@ -78,7 +78,7 @@ public class MovieController {
 	}
 	
 	@PostMapping("")
-	public Movie saveBook(@RequestBody MovieDto dto) {
+	public Movie saveMovie(@RequestBody MovieDto dto) {
 		//var id = UUID.randomUUID().toString();
 	
 		//movies.put(id, new Movie(dto.getTitle(), dto.getDescription(), dto.getDirector()));
@@ -88,7 +88,7 @@ public class MovieController {
 	}
 
 	@PutMapping("{title}")
-	public Movie updateBook(@PathVariable("title") String movieTitle, @RequestBody MovieDto dto) {
+	public Movie updateMovie(@PathVariable("title") String movieTitle, @RequestBody MovieDto dto) {
 		//movies.put(movieId, new Movie(dto.getTitle(), dto.getDescription(), dto.getDirector()));
 		
 		return movieService.update(movieTitle, new Movie(dto.getTitle(), dto.getDescription(), dto.getDirector()));
