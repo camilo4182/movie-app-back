@@ -25,7 +25,7 @@ import au.com.dius.pact.provider.junitsupport.loader.PactBrokerAuth;
 import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget;
 
 @PactBroker(url = "${PACT_BROKER_BASE_URL}",
-authentication = @PactBrokerAuth(token = "${PACT_BROKER_TOKEN}"))
+			authentication = @PactBrokerAuth(token = "${PACT_BROKER_TOKEN}"))
 @Provider("MoviesAppBack")
 @ExtendWith(MockitoExtension.class)
 public class MovieAppProviderTest {
@@ -44,8 +44,6 @@ public class MovieAppProviderTest {
 	
 	@BeforeEach
 	public void changeContext(PactVerificationContext context) {
-        System.setProperty("pact.verifier.publishResults", "true");
-        System.setProperty("pact.provider.version", "1.0");
         MockMvcTestTarget testTarget = new MockMvcTestTarget();
         testTarget.setControllers(movieController);
         context.setTarget(testTarget);
