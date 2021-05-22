@@ -28,3 +28,8 @@ jobs:
       run: ./gradlew build
     - name: Run component tests
       run: ./gradlew test --tests "com.example.demo.component.api.movie.*"
+    - name: Run contract tests
+      env:
+        PACT_BROKER_BASE_URL: ${{secrets.PACT_BROKER_BASE_URL}}
+        PACT_BROKER_TOKEN: ${{secrets.PACT_BROKER_TOKEN}}
+      run: ./gradlew test --tests "com.example.demo.contract.api.provider.*"
