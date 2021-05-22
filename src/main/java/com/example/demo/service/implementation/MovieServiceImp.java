@@ -12,7 +12,6 @@ import com.example.demo.service.interfaces.MovieService;
 @Component
 public class MovieServiceImp implements MovieService {
 	
-//	@Autowired
 	private MovieRepository movieRepository;
 	
 	@Autowired
@@ -36,24 +35,15 @@ public class MovieServiceImp implements MovieService {
 	}
 
 	@Override
-	public Movie update(String title, Movie movie) {
-		var oldMovie = movieRepository.findByTitle(title);
-		if(movie.getTitle() == null) {
-			movie.setTitle(title);
-		}
-//		oldMovie.setTitle(movie.getTitle());
-//		oldMovie.setDescription(movie.getDescription());
-//		oldMovie.setDirector(movie.getDirector());
+	public Movie update(String id, Movie movie) {
+		var oldMovie = movieRepository.findById(id).get();
 		movie.setId(oldMovie.getId());
-		movieRepository.save(movie);
-		return null;
+		return movieRepository.save(movie);
 	}
 
 	@Override
 	public void delete(String title) {
-		movieRepository.deleteById(title);
+		Movie movie = movieRepository.findByTitle(title);
+		movieRepository.delete(movie);
 	}
-	
-	
-
 }
